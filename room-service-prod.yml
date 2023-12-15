@@ -1,0 +1,82 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: room-service
+
+  # DB
+  datasource:
+    url: jdbc:h2:mem:bookingdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: sa
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+
+# Eureka
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    env:
+      enabled: true
+  endpoint:
+    gateway:
+      enabled: true
+
+  # Zipkin
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+
+# App description
+info:
+  app:
+    name: Room microservice
+    description: Application to reserve an rooms
+    version: 1.0.0
+
+# Logging
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+    
+# General information
+room-service:
+  msg: "Welcome to the Reservations Hotels applications"
+  build-version: 1
+
+# Mail information
+  mailDetails:
+    hostName: "prod-gibbfarc17@gmail.com"
+    port: 6410
+    from: "prod-gibbfarc17@gmail.com"
+    subject: "Your Reservations is ready"

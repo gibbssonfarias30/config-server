@@ -1,0 +1,67 @@
+server:
+  port: 8066
+spring:
+  application:
+    name: gateway-server
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+
+# Security oath2
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8181/realms/booking/protocol/openid-connect/certs
+
+# Eureka
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    env:
+      enabled: true
+  endpoint:
+    gateway:
+      enabled: true
+
+  # Zipkin
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+
+# App description
+info:
+  app:
+    name: Gateway Server microservice
+    description: Microservices for gateway in microservices
+    version: 1.0.0
+
+# Logging
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
